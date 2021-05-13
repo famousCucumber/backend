@@ -144,4 +144,4 @@ if __name__ == "__main__":
         for key in keyword:
             obj[key] = keyword[key]
         results.append(obj)
-    print(results)
+    print(json.dumps(results))
