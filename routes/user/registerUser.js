@@ -4,13 +4,20 @@ const router = express.Router();
 
 router.use('/', async function(req, res, next) {
     try {
-        const { email, cityList, countyList, selectList } = req.body;
-        const userSchema = new UserSchema();
+        const userData = req.body;
+        var userSchema;
 
-        userSchema.email = email;
-        userSchema.cityList = cityList.slice();
-        userSchema.countyList = countyList.slice();
-        userSchema.selectList = selectList.slice();
+        userSchema = await UserSchema.find({email: userData.email});
+        if(!userSchema || !userSchema.length) {
+            userSchema = new UserSchema();
+        } else {
+            userSchema = userSchema[0];
+        }
+
+        userSchema.email = userData.email;
+        userSchema.cityList = userData.cityList.slice();
+        userSchema.countyList = userData.countyList.slice();
+        userSchema.selectList = userData.selectList.slice();
 
         await userSchema.save();
 
@@ -18,6 +25,7 @@ router.use('/', async function(req, res, next) {
            .json({message: 'successfully registered'});
 
     } catch(err) {
+        console.error(err);
         res.status(500)
            .json({message: 'failed due to internal error', err: JSON.stringify(err)});
     }
