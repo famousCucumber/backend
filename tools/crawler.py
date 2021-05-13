@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 import sys
 import requests
 import json
@@ -140,6 +139,7 @@ if __name__ == "__main__":
     results = []
     for article in article_list:
         obj = article
+        
         keyword = get_keyword(article["content"])
         for key in keyword:
             obj[key] = keyword[key]
