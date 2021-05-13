@@ -4,9 +4,7 @@ var Schema = mongoose.Schema;
 var userPostSchema = new Schema(
     {
         email: String,
-        keywordList: Array,
-        cityList: Array,
-        countyList: Array,
+        locationList: Array,
         selectList: Array,
         created: {
             type: Date,
