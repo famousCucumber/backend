@@ -15,9 +15,7 @@ router.use('/', async function(req, res, next) {
         }
 
         userSchema.email = userData.email;
-        userSchema.cityList = userData.cityList.slice();
-        userSchema.countyList = userData.countyList.slice();
-        userSchema.selectList = userData.selectList.slice();
+        userSchema.keywordList = userData.keywordList.slice();
 
         await userSchema.save();
 
