@@ -5,7 +5,6 @@ const ArticleSchema = require('../../model/articleSchema');
 
 cron.schedule('*/1 * * * *', function () {
     try {
-
     ArticleSchema.findOne()
         .sort('-ordr')
         .exec((err, article) => {
