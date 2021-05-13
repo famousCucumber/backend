@@ -2,6 +2,9 @@ var cron = require('node-cron');
 const { PythonShell } = require('python-shell');
 var path = require('path');
 const ArticleSchema = require('../../model/articleSchema');
+var {sendMail} = require("../../tools/sendEmail");
+var getUserEmailByKeywords = require("../user/getUser");
+
 
 cron.schedule('*/1 * * * *', function () {
     try {
@@ -40,6 +43,13 @@ cron.schedule('*/1 * * * *', function () {
             PythonShell.run("crawler.py", options, function (err, data) {
                 let json = JSON.parse(data[0].toString('utf-8'));    //let json = JSON.parse(data);
                 for(let articleJson of json) {
+                    // Send mail
+                    let emailList = getUserEmailByKeywords(articleJson.location, articleJson.keyword);
+                    for(let email of emailList) {
+                        sendMail(email, `[난보바] ${articleJson.keyword[0]} 재난 문자`, `[난보바] ${articleJson.keyword[0]} 재난 문자`)
+                    }
+
+                    // Save
                     let article = new ArticleSchema({
                         ordr: articleJson.ordr,
                         date: articleJson.date,
@@ -47,7 +57,7 @@ cron.schedule('*/1 * * * *', function () {
                         location: articleJson.location,
                         keyword: articleJson.keyword
                     })
-
+                    
                     article.save((err) => {
                         console.log(err);
                     })
