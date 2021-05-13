@@ -1,5 +1,6 @@
 var cron = require('node-cron');
 const { PythonShell } = require('python-shell');
+var path = require('path');
 const ArticleSchema = require('../../model/articleSchema');
 
 cron.schedule('*/1 * * * *', function () {
