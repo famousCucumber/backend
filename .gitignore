@@ -5,8 +5,8 @@
 .atom
 
 # Config Files
-*.json
 *.ini
 
 #modules
 node_modules/
+bin/configEnv.js
