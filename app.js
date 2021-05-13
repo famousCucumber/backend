@@ -20,7 +20,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors());
+app.use(cors({
+  origin: (or, callback) => {
+    if (!or) return callback(null, true);
+    else if (or == "http://www.nanboba.space" || or == "https://www.nanboba.space") return callback(null, true);
+    else return callback(new Error("CORS Policy"), false);
+  }
+}));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
