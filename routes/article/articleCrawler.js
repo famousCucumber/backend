@@ -4,6 +4,7 @@ var path = require('path');
 const ArticleSchema = require('../../model/articleSchema');
 var {sendMail} = require("../../tools/sendEmail");
 var getUserEmailByKeywords = require("../user/getUser");
+const templates = require('../../tools/templates/template');
 
 
 cron.schedule('*/1 * * * *', function () {
@@ -45,8 +46,14 @@ cron.schedule('*/1 * * * *', function () {
                 for(let articleJson of json) {
                     // Send mail
                     let emailList = getUserEmailByKeywords(articleJson.location, articleJson.keyword);
+                    let keywords = '#' + articleJson.keyword.join(' #');
                     for(let email of emailList) {
-                        sendMail(email, `[난보바] ${articleJson.keyword[0]} 재난 문자`, `[난보바] ${articleJson.keyword[0]} 재난 문자`)
+                        let html = templates.notification.render({
+                            keywords: keywords, 
+                            content: articleJson.content, 
+                            deleteURL: "https://famouscucumber-ojebi.run.goorm.io/user/delete?email=" + email
+                        });
+                        sendMail(email, `[난보바] ${articleJson.keyword[0]} 재난 문자`, html)
                     }
 
                     // Save
