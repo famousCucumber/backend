@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <style>
+        :root {
+            --c100: #fcecdd;
+            --c300: #ffc288;
+            --c500: #fea82f;
+            --c700: #ff6701;
+        }
+    </style>
+</head>
+
+<body class='p-4' style="background-color: #f5f5f5;">
+    <div class='d-flex justify-content-center align-items-center' style="margin-bottom: 24px;">
+        <img src='../public/images/orange_email.png' style="width: 48px; margin-left: 12px;">
+    </div>
+    <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 offset-md-4 col-sm-6 offset-sm-3 col-10 offset-1 d-flex flex-column border bg-white p-4"
+            style='min-height: 300px;'>
+            <h4>긴급재난문자</h4>
+            <h6 style="color: var(--bs-blue)">{{keywords}}</h6>
+            <p>{{content}}</p>
+            <div class='text-center' style="font-size:small; color: var(--c500); margin-top: auto;">
+                난보바
+            </div>
+            <div class="d-flex justify-content-center align-items-center">
+                <a href="https://www.nanboba.space" style="text-decoration: none;">
+                    <div style='color: var(--c700);'>
+                        키워드 설정
+                    </div>
+                </a>
+                <span class="m-1">·</span>
+                <a href="{{deleteURL}}" style="text-decoration: none;">
+                    <div style='color: var(--c700);'>
+                        구독취소
+                    </div>
+                </a>
+            </div>
+            <div class='text-center' style="font-size: xx-small; color: (--bs-gray);">
+                <span>Made My Famous Cucumber</span>
+            </div>
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
