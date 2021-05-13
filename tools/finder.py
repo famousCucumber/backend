@@ -143,4 +143,4 @@ if __name__ == "__main__":
         result= get_prev_data()
     else:
         result = get_keyword(text)
-    print(result)
+    print(json.dumps(result))
