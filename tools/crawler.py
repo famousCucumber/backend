@@ -3,6 +3,7 @@ import sys
 import requests
 import json
 from datetime import datetime, timedelta
+from finder import get_keyword
 
 
 def get_bbs_ordr_list(last_ordr):
@@ -136,6 +137,12 @@ if __name__ == "__main__":
     last_ordr = int(sys.argv[1])
     ordr_list = get_bbs_ordr_list(last_ordr)
     article_list = get_article_list(ordr_list)
-    print(article_list)
-
-
+    results = [] 
+    for article in article_list:
+        article["content"] = article["content"]
+        obj = article
+        keyword = get_keyword(article["content"])
+        for key in keyword:
+            obj[key] = keyword[key]
+        results.append(obj)
+    print(results)
