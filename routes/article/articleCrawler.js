@@ -4,6 +4,8 @@ var path = require('path');
 const ArticleSchema = require('../../model/articleSchema');
 
 cron.schedule('*/1 * * * *', function () {
+    try {
+
     ArticleSchema.findOne()
         .sort('-ordr')
         .exec((err, article) => {
@@ -36,7 +38,7 @@ cron.schedule('*/1 * * * *', function () {
 
             // Run Python
             PythonShell.run("crawler.py", options, function (err, data) {
-                let json = JSON.parse(data);
+                let json = JSON.parse(data[0].toString('utf-8'));    //let json = JSON.parse(data);
                 for(let articleJson of json) {
                     let article = new ArticleSchema({
                         ordr: articleJson.ordr,
@@ -52,6 +54,11 @@ cron.schedule('*/1 * * * *', function () {
                 }
             });
         })
+    }
+    catch(err) {
+        console.log("Scheduler Error: " + err)
+        return;
+    }
 });
 
 module.exports = this;
