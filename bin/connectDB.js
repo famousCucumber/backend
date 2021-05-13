@@ -2,7 +2,7 @@ var mongoose = require('mongoose')
 
 var init = function() {
     const config = {
-        protocol: "mongodb+srv",
+        protocol: "mongodb",
         userName: process.env.DB_USERNAME,
         userPW: process.env.DB_PW,
         path: process.env.DB_PATH,
