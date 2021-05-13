@@ -4,6 +4,7 @@
  * Module dependencies.
  */
 
+require('./configEnv')();
 var app = require('../app');
 var debug = require('debug')('hackerton-oioi:server');
 var http = require('http');
