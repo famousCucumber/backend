@@ -1,5 +1,4 @@
 import json
-import sys
 import re
 
 def to_return_obj(obj, location):
@@ -44,11 +43,10 @@ def get_keyword(text):
     # input : content -> string
     # output : {location -> list[string], keyword -> list[string]}
     
-    with open("data/keywords.json","r",encoding="utf8") as json_file:
+    with open("workspace/FamousCucumber/backend/tools/data/keywords.json","r",encoding="utf8") as json_file:
         keywords = json.load(json_file)
-    with open("data/kor_city.json","r",encoding="cp949") as json_file:
+    with open("workspace/FamousCucumber/backend/tools/data/kor_city.json","r",encoding="utf8") as json_file:
         location = json.load(json_file)
-        
 
     result = {"keyword":[], "location":[]}
     cities = location.keys()
@@ -103,28 +101,3 @@ def get_keyword(text):
         result["keyword"].append("기타")
     
     return result
-
-def get_prev_data():
-    results = []
-    with open("data/articleMap.json","r") as json_file:
-        prev_data = json.load(json_file)
-        
-    for key in prev_data:
-        keyword = get_keyword(prev_data[key][-1])
-        obj = {}
-        obj["ordr"] = int(key)
-        obj["date"] = prev_data[key][1]
-        obj["content"] = prev_data[key][-1]
-        obj["keyword"] = keyword["keyword"]
-        obj["location"] = keyword["location"]
-        if len(obj["location"])>0:
-            results.append(obj)
-    return results
-
-if __name__ == "__main__":
-    text = sys.argv[1]
-    if text == "prev":
-        result= get_prev_data()
-    else:
-        result = get_keyword(text)
-    print(json.dumps(result))
