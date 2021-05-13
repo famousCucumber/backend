@@ -3,6 +3,7 @@ var Schema = mongoose.Schema;
 
 var articlePostSchema = new Schema(
     {
+        ordr: {type: Number, unique: true},
         date: Date,
         content: String,
         location: [String],
