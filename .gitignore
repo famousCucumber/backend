@@ -7,3 +7,9 @@
 # Config Files
 *.json
 *.ini
+
+# Binaries
+*.pkl
+*.pyc
+
+node_modules
