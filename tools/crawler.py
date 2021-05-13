@@ -119,9 +119,10 @@ def get_article_list(ordr_list):
 
         # Append article map to result(list)
         bbs_map = json_data["bbsMap"]
-        dt = bbs_map["frst_regist_dt"]
+        dt = bbs_map["sj"][:19]
         cn = bbs_map["cn"]
         article_map = {
+            "ordr": ordr,
             "date": dt,
             "content": cn
         }
@@ -133,7 +134,6 @@ def get_article_list(ordr_list):
 
 if __name__ == "__main__":
     last_ordr = int(sys.argv[1])
-
     ordr_list = get_bbs_ordr_list(last_ordr)
     article_list = get_article_list(ordr_list)
     print(article_list)
