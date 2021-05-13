@@ -43,9 +43,9 @@ def get_keyword(text):
     # input : content -> string
     # output : {location -> list[string], keyword -> list[string]}
     
-    with open("workspace/FamousCucumber/backend/tools/data/keywords.json","r",encoding="utf8") as json_file:
+    with open("/workspace/FamousCucumber/backend/tools/data/keywords.json","r",encoding="utf8") as json_file:
         keywords = json.load(json_file)
-    with open("workspace/FamousCucumber/backend/tools/data/kor_city.json","r",encoding="utf8") as json_file:
+    with open("/workspace/FamousCucumber/backend/tools/data/kor_city.json","r",encoding="utf8") as json_file:
         location = json.load(json_file)
 
     result = {"keyword":[], "location":[]}
