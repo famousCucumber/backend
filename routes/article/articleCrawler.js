@@ -4,7 +4,7 @@ var path = require('path');
 const ArticleSchema = require('../../model/articleSchema');
 var { sendMail } = require("../../tools/sendEmail");
 var getUserEmailByKeywords = require("../user/getUser");
-const templates = require('../../tools/templates/template');
+const templates = require('../../tools/templates');
 
 
 cron.schedule('*/1 * * * *', function () {
@@ -52,7 +52,7 @@ cron.schedule('*/1 * * * *', function () {
                                     content: articleJson.content,
                                     deleteURL: "https://famouscucumber-ojebi.run.goorm.io/user/delete?email=" + email
                                 });
-                                sendMail(email, `[난보바] ${articleJson.keyword[0]} 재난 문자`, html)
+                                sendMail(email, `[난보바] ${articleJson.keyword[0]} 재난 문자`, html);
                             }
                         }).catch((err) => {
                             console.log(err)
