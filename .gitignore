@@ -1,0 +1,9 @@
+# IDE Files
+.vscode
+.idea
+.webstorm
+.atom
+
+# Config Files
+*.json
+*.ini
