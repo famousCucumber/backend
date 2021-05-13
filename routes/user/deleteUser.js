@@ -2,9 +2,20 @@ const express = require('express');
 const UserSchema = require('../../model/userSchema');
 const router = express.Router();
 
+function validateEmail(email) {
+    var re = /^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/i;
+    return re.test(email);
+}
+
 router.use('/', async function(req, res, next) {
     try {
         var targetEmail = req.query.email;
+
+        if (!validateEmail(targetEmail)) {
+            return res.status(400)
+                .json({message: 'Invaild Email'});
+        }
+
         var output = await UserSchema.deleteMany({email: targetEmail});
 
         if(output.n == 0) {
