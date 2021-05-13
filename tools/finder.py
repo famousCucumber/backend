@@ -2,14 +2,6 @@ import json
 import sys
 import re
 
-def replace_location(text, location, counties):
-    with open("data/short_name.json","r") as json_file:
-        short_name = json.load(json_file)
-    for short in short_name:
-        if short in text:
-            text = text.replace(short,short_name[short])
-    return text
-            
 def to_return_obj(obj, location):
     result = {}
     result["keyword"] = obj["keyword"]
@@ -45,14 +37,6 @@ def to_return_obj(obj, location):
             else:
                 for county in location[city]:
                     result["location"].append(f"{city} {county}")
-    # 헬게이트
-    elif len(obj["city"])>1 and len(obj["county"])>1:
-        pass
-    # 전국
-    '''elif len(obj["city"]) == 0 and len(obj["county"]) == 0:
-        for city in location:
-            for county in location[city]:
-                result["location"].append(f"{city} {county}")'''
         
     return result
 
@@ -62,7 +46,7 @@ def get_keyword(text):
     
     with open("data/keywords.json","r",encoding="utf8") as json_file:
         keywords = json.load(json_file)
-    with open("data/kor_city.json","r") as json_file:
+    with open("data/kor_city.json","r",encoding="cp949") as json_file:
         location = json.load(json_file)
         
 
