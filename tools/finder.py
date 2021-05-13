@@ -9,20 +9,21 @@ def replace_location(text, location, counties):
         if short in text:
             text = text.replace(short,short_name[short])
     return text
-
-def set_city(obj, location):
-    for local in location:
-        for county in location[local]:
-            if obj["county"][0] == county:
-                obj["city"].append(local)
-                return obj
             
 def to_return_obj(obj, location):
     result = {}
     result["keyword"] = obj["keyword"]
     result["location"] = []
+    
+    # 시가 없고 도시만 있는 경우
+    if len(obj["city"])==0 and len(obj["county"])>=1:
+        for county in obj["county"]:
+            for city in location:
+                if county in location[city]:
+                    result["location"].append(f"{city} {county}")
+                    break
     # 시 전체
-    if len(obj["city"])>0 and len(obj["county"])==0:
+    elif len(obj["city"])>0 and len(obj["county"])==0:
         if obj["city"][0] == "세종특별자치시":
             result["location"].append("세종특별자치시")
         for city in obj["city"]:
@@ -32,11 +33,7 @@ def to_return_obj(obj, location):
     elif len(obj["city"])==1 and len(obj["county"])>0:
         for county in obj["county"]:
             result["location"].append(f"{obj['city'][0]} {county}")
-    # 전국
-    elif len(obj["city"]) == 0 and len(obj["county"]) == 0:
-        for city in location:
-            for county in location[city]:
-                result["location"].append(f"{city} {county}")
+
     # 시가 여러개 구가 하나
     # 구는 시 하나에 있다.
     # 구가 없는 시는 시 전체
@@ -51,27 +48,31 @@ def to_return_obj(obj, location):
     # 헬게이트
     elif len(obj["city"])>1 and len(obj["county"])>1:
         pass
+    # 전국
+    '''elif len(obj["city"]) == 0 and len(obj["county"]) == 0:
+        for city in location:
+            for county in location[city]:
+                result["location"].append(f"{city} {county}")'''
         
     return result
 
 def get_keyword(text):
     # input : content -> string
-    # output : {city -> list[string], county -> list[string], keyword -> list[string]}
+    # output : {location -> list[string], keyword -> list[string]}
     
     with open("data/keywords.json","r",encoding="utf8") as json_file:
         keywords = json.load(json_file)
     with open("data/kor_city.json","r") as json_file:
         location = json.load(json_file)
         
-    result = {"city":[],"county":[],"keyword":[]}
+
+    result = {"keyword":[], "location":[]}
     cities = location.keys()
     counties = []
     for c in location.values():
         counties += c
         
         
-    text = replace_location(text,location, counties)
-    text.replace("\r","").replace("\n","")
     token = text.split()
     words = []
     
@@ -85,25 +86,61 @@ def get_keyword(text):
             if value in text:
                 result["keyword"].append(key)
                 break
-    
-    for city in cities:
-        if city in text and city not in result["city"]:
-            result["city"].append(city)
-    for county in counties:
-        if county in text and county not in result["county"]:
-            result["county"].append(county)
+            
+    if "-송출지역-" in text:
+        locales = text[text.find("-송출지역-")+len("-송출지역-")+2:].split("\n")
+        for local in locales:
+            local = local.replace("\r","")
+            if local == "세종특별자치시":
+                result["location"].append(local)
+            else:
+                try:
+                    city, county = local.split(" ")
+                except:
+                    continue
+                if county == "전체":
+                    for c in location[city]:
+                        result["location"].append(f"{city} {c}")
+                else:
+                    result["location"].append(local)
                     
+    if len(result["location"]) == 0:
+        obj = {"city":[],"county":[],"keyword":result["keyword"]}
+        for city in cities:
+            if city in text and city not in obj["city"]:
+                obj["city"].append(city)
+        for county in counties:
+            if county in text and county not in obj["county"]:
+                obj["county"].append(county)
+                
+        result = to_return_obj(obj, location)
+    
     if len(result["keyword"]) == 0:
         result["keyword"].append("기타")
-        
-    if len(result["city"])==0 and len(result["county"])>=1:
-        result = set_city(result,location)
-        
-    obj = to_return_obj(result, location)
     
-    return obj
+    return result
+
+def get_prev_data():
+    results = []
+    with open("data/articleMap.json","r") as json_file:
+        prev_data = json.load(json_file)
+        
+    for key in prev_data:
+        keyword = get_keyword(prev_data[key][-1])
+        obj = {}
+        obj["ordr"] = int(key)
+        obj["date"] = prev_data[key][1]
+        obj["content"] = prev_data[key][-1]
+        obj["keyword"] = keyword["keyword"]
+        obj["location"] = keyword["location"]
+        if len(obj["location"])>0:
+            results.append(obj)
+    return results
 
 if __name__ == "__main__":
     text = sys.argv[1]
-    result = get_keyword(text)
+    if text == "prev":
+        result= get_prev_data()
+    else:
+        result = get_keyword(text)
     print(result)
