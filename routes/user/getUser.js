@@ -1,38 +1,39 @@
 const UserSchema = require('../../model/userSchema');
 
-var getUserEmailByKeywords = function (in_keywordList) {
+var buildQuery = function (in_locationList, in_selectList) {
+    var locationQuery = new Array();
+    var selectQuery = new Array();
+
+    in_locationList.forEach(location => {
+        locationQuery.push({ locationList: location });
+    });
+    in_selectList.forEach(select => {
+        selectQuery.push({ selectList: select });
+    });
+
+    var query = {
+        $and: [
+            { $or: locationQuery },
+            { $or: selectQuery },
+        ],
+    };
+    return query;
+};
+
+var getUserEmailByKeywords = function (in_locationList, in_selectList) {
     return new Promise(async function (resolve, reject) {
         try {
-            var emailList = new Array();
-            var searchDB = function() {
-                return new Promise(async function(resolve, reject){
-                    try{
-                        for(let i = 0; i < in_keywordList.length; i++) {
-                            var keyword = in_keywordList[i];
-                            var userList = await UserSchema
-                                .find({keywordList: keyword})
-                                .exec();
-                            userList.forEach(user => {
-                                emailList.push(user.email);
-                                console.log('in');
-                                console.log(emailList);
-                            });
-                        }
-                        resolve();
-                    }catch(err) {
-                        console.error(err);
-                        reject();
-                    }
-                });
-            };
-            if (in_keywordList) {
-                console.log('await');
-                await searchDB();
-                console.log('await finish');
-                console.log(emailList);
-                var returnList = new Set(emailList);
-                resolve(returnList);
-            }
+            var emailList = new Set();
+            var query = buildQuery(in_locationList, in_selectList);
+            var userList = await UserSchema
+                .find()
+                .or(query)
+                .exec();
+
+            userList.forEach(user => {
+                emailList.add(user.email);
+            });
+            resolve(emailList);
         } catch (err) {
             reject(err);
         }
