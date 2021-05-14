@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  form(action='/user/register', method='POST')
+    input(type='text', name='email' placeholder='email')
+    br
+    input(type='text', name='locationList' placeholder='location')
+    br
+    input(type='text', name='locationList' placeholder='location')
+    br
+    input(type='text', name='locationList' placeholder='location')
+    br
+    input(type='text', name='selectList' placeholder='select')
+    br
+    input(type='text', name='selectList' placeholder='select')
+    br
+    input(type='text', name='selectList' placeholder='select')
+    br
+    input(type='submit')

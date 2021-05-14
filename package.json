@@ -1,0 +1,35 @@
+{
+  "name": "hackerton-oioi",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node ./bin/www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "cors": "^2.8.5",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "jade": "~1.11.0",
+    "mongoose": "^5.12.8",
+    "morgan": "~1.9.1",
+    "node-cron": "^3.0.0",
+    "nodemailer": "^6.6.0",
+    "nunjucks": "^3.2.3",
+    "python-shell": "^3.0.0"
+  },
+  "description": "For swm hackerton",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yeonwu/hackerton_oioi.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yeonwu/hackerton_oioi/issues"
+  },
+  "homepage": "https://github.com/Yeonwu/hackerton_oioi#readme"
+}
